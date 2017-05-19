@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Homework. Task 8.1.</title>
+
+	<style>
+
+		#container {
+			width: 220px;
+			position: relative;
+			top: 200px;
+			margin: auto;
+			padding: 10px;
+			border-style: solid;
+			border-radius: 5px;
+			border-width: 1px;
+		}
+		
+		p {
+			font-size: 40px;
+			margin: auto;
+			text-align: center;
+		}
+
+	</style>
+
+	</head>
+	<body>
+
+	<div id="basement">
+		<div>
+			<h2> Домашнее задание.
+Реализовать программу, определяющую рейтинг услуги по пятибальной системе. </h2>
+			<p>Условия:</p>
+			<ol>
+				<li>При наведении указателя мыши на звезду, она должны менять цвет вместе со звездами слева;</li>
+				<li>Звезды должны становиться белыми при уходе указателя мышки со звезд;</li>
+				<li>При клике на  любую звезду, изменение цвета звезд от положения указателя мыши должно прекращаться до следующего клика.</li>
+			</ol>
+		</div>
+		<div id="container">
+			<img src="img/whitestar.png" alt="Rate star">
+			<img src="img/whitestar.png" alt="Rate star">
+			<img src="img/whitestar.png" alt="Rate star">
+			<img src="img/whitestar.png" alt="Rate star">
+			<img src="img/whitestar.png" alt="Rate star">
+			<p id='output'></p>
+		</div>
+	</div>
+
+		<script>
+		
+		var myNS = myNS || {};
+			myNS.createNS = function (namespace) {
+			    var nsparts = namespace.split(".");
+			    var parent = myNS;
+			    if (nsparts[0] === "myNS") {
+			        nsparts = nsparts.slice(1);
+			    }
+			    for (var i = 0; i < nsparts.length; i++) {
+			        var partname = nsparts[i];
+			        if (typeof parent[partname] === "undefined") {
+			            parent[partname] = {};
+			        }
+			        parent = parent[partname];
+			    }
+			    return parent;
+			};
+
+			myNS.createNS('myNS.rating');
+			myNS.rating.container = document.getElementById('container');
+			myNS.rating.output = document.getElementById('output');
+			myNS.rating.img = document.getElementsByTagName('img');
+			myNS.rating.rated = 'false';
+			myNS.rating.rate = 0;
+			myNS.rating.getInitiated = function () {
+				myNS.rating.container.onmouseover = myNS.rating.getOver;
+				myNS.rating.container.onmouseout = myNS.rating.getOut;
+				myNS.rating.container.onclick = myNS.rating.getRated;
+				//creating img's Ids
+				for (var i = 0; i < myNS.rating.img.length; i++) {
+					myNS.rating.img[i].id = "img" + i;
+				}
+			};
+			myNS.rating.getOver = function (event) {
+				//getting the last digit of Id
+				var eventIndex = event.target.id.slice(-1);
+				console.log(eventIndex);
+				for (var i = 0; i < myNS.rating.img.length; i++) {
+					//getting the last digit of Id
+					var itemIndex = myNS.rating.img[i].id.slice(-1);
+					// eventIndex < 9 is for div's events last letter Ids filtering  
+					if (itemIndex <= eventIndex && eventIndex < 9 && myNS.rating.rated == 'false') {
+					console.log(itemIndex);	
+					myNS.rating.img[i].src = "img/orangestar.png";
+					myNS.rating.rate = eventIndex;
+					myNS.rating.output.innerHTML = 'Rating: ' + eventIndex;
+					}
+				}
+			};
+
+			myNS.rating.getOut = function (event) {
+				var eventIndex = event.target.id.slice(-1);
+				console.log(eventIndex);
+				for (var i = 0; i < myNS.rating.img.length; i++) {
+					var itemIndex = myNS.rating.img[i].id.slice(-1);
+					if (itemIndex <= eventIndex && eventIndex < 9 && myNS.rating.rated == 'false') {
+						console.log(itemIndex);	
+						myNS.rating.img[i].src = "img/whitestar.png";
+						myNS.rating.output.innerHTML = 'Rating: ' + '0';
+					} else if(itemIndex > eventIndex && eventIndex < 9 && myNS.rating.rated == 'false') {
+						myNS.rating.img[i].src = "img/whitestar.png";
+					}
+				}
+			};
+			
+			myNS.rating.getRated = function (event) {
+				myNS.rating.rated == 'false' ? 
+				myNS.rating.rated = 'true' : myNS.rating.rated = 'false';
+			};
+
+		myNS.rating.getInitiated();
+
+		</script>
+		
+	</body>
+</html>
